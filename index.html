@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herahome - Futuristic Living in Torremolinos</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+        
+        :root {
+            --primary-color: #003580;
+            --primary-hover: #002247;
+            --secondary-color: #0071c2;
+            --accent-color: #febb02;
+            --text-dark: #222222;
+            --text-light: #6b6b6b;
+            --bg-light: #f5f5f5;
+            --bg-white: #ffffff;
+            --border-color: #dddddd;
+            --success-color: #008009;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.08);
+            --shadow-md: 0 2px 4px rgba(0,0,0,0.12);
+            --shadow-lg: 0 4px 8px rgba(0,0,0,0.16);
+            --hero-gradient-start: #000000;
+            --hero-gradient-end: #1a1a1a;
+            --hero-accent: #007AFF;
+            --hero-text-primary: #ffffff;
+            --hero-text-secondary: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: #f8f9fa;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 156px;
+            height: 156px;
+            background: transparent;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: visible;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: url('logo.png') no-repeat center;
+            background-size: contain;
+            border: none;
+            outline: none;
+            box-shadow: none;
+        }
+
+        .hero-logo {
+            width: 360px;
+            height: 360px;
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 50px;
+            position: relative;
+            overflow: visible;
+        }
+
+        .hero-logo::before {
+            content: '';
+            position: absolute;
+            width: 224px;
+            height: 224px;
+            background: url('logo.png') no-repeat center;
+            background-size: contain;
+            border: none;
+            outline: none;
+            box-shadow: none;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-menu a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-color);
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--hero-gradient-start) 0%, var(--hero-gradient-end) 50%, #2d2d2d 100%);
+            color: var(--hero-text-primary);
+            padding: 80px 0 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            margin-top: -80px;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 122, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 122, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            animation: heroFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes heroFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(1deg); }
+            66% { transform: translateY(10px) rotate(-1deg); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-family: 'Roboto', sans-serif;
+            font-size: clamp(48px, 8vw, 120px);
+            font-weight: 100;
+            margin-bottom: 24px;
+            margin-top: -40px;
+            letter-spacing: 0.1em;
+            line-height: 0.9;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 50%, rgba(255, 255, 255, 0.8) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { 
+                filter: brightness(1) drop-shadow(0 0 20px rgba(0, 122, 255, 0.3));
+            }
+            50% { 
+                filter: brightness(1.1) drop-shadow(0 0 30px rgba(0, 122, 255, 0.5));
+            }
+        }
+
+        .hero-subtitle {
+            font-family: 'Roboto', sans-serif;
+            font-size: clamp(18px, 3vw, 28px);
+            font-weight: 300;
+            margin-bottom: 48px;
+            opacity: 0.9;
+            letter-spacing: 0.05em;
+            line-height: 1.4;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .btn-hero-primary {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: var(--hero-text-primary);
+            padding: 16px 32px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-weight: 300;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 16px;
+            font-family: 'Roboto', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-hero-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-hero-primary:hover::before {
+            opacity: 1;
+        }
+
+        .btn-hero-primary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-hero-secondary {
+            background: var(--hero-accent);
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 300;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 16px;
+            font-family: 'Roboto', sans-serif;
+            box-shadow: 0 10px 30px rgba(0, 122, 255, 0.3);
+        }
+
+        .btn-hero-secondary:hover {
+            background: #0051D5;
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 122, 255, 0.4);
+        }
+
+        .hero-features {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .hero-feature:hover {
+            opacity: 1;
+        }
+
+        .hero-feature i {
+            font-size: 20px;
+            color: var(--hero-accent);
+        }
+
+        .hero-feature span {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 300;
+            font-size: 14px;
+        }
+
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1) 0%, rgba(0, 122, 255, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 5s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            bottom: 20%;
+            left: 15%;
+            animation-delay: 10s;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg) scale(1); 
+            }
+            25% { 
+                transform: translateY(-30px) rotate(90deg) scale(1.05); 
+            }
+            50% { 
+                transform: translateY(-15px) rotate(180deg) scale(0.95); 
+            }
+            75% { 
+                transform: translateY(-25px) rotate(270deg) scale(1.02); 
+            }
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: var(--text-dark);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+            font-size: 16px;
+        }
+
+        .btn-primary:hover {
+            background: #e5a600;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+            font-size: 16px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .section {
+            padding: 60px 0;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .photo-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .photo-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+
+        .photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+            padding: 20px;
+            color: white;
+        }
+
+        .photo-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .photo-description {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        #map {
+            height: 450px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 30px;
+        }
+
+        .location-info {
+            background: var(--bg-white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+        }
+
+        .location-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        .location-address {
+            font-size: 18px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .location-badges {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: var(--bg-light);
+            color: var(--text-dark);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge i {
+            color: var(--primary-color);
+        }
+
+        .comment-section {
+            background: var(--bg-white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 30px;
+        }
+
+        .comment-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-family: inherit;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(0, 53, 128, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .star {
+            font-size: 28px;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .star:hover {
+            color: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        .star.active {
+            color: var(--accent-color);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-submit:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .comments-list {
+            margin-top: 40px;
+        }
+
+        .comment-item {
+            background: var(--bg-white);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.2s;
+        }
+
+        .comment-item:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .comment-author {
+            flex: 1;
+        }
+
+        .comment-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+
+        .comment-reservation {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .comment-rating {
+            color: var(--accent-color);
+            font-size: 18px;
+        }
+
+        .comment-text {
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: var(--bg-white);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .feature-description {
+            color: var(--text-light);
+            line-height: 1.5;
+        }
+
+        .notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--bg-white);
+            padding: 16px 20px;
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 400px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .notification.error {
+            border-left: 4px solid #dc3545;
+        }
+
+        .notification-icon {
+            font-size: 20px;
+        }
+
+        .notification.success .notification-icon {
+            color: var(--success-color);
+        }
+
+        .notification.error .notification-icon {
+            color: #dc3545;
+        }
+
+        .footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .footer-description {
+            margin-bottom: 25px;
+            opacity: 0.8;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 20px;
+            transition: opacity 0.2s;
+        }
+
+        .social-links a:hover {
+            opacity: 0.7;
+        }
+
+        .footer-copyright {
+            font-size: 14px;
+            opacity: 0.6;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 36px;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+            
+            .photo-gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .comment-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">HERAHOME</a>
+                <nav>
+                    <ul class="nav-menu">
+                        <li><a href="#gallery">Galería</a></li>
+                        <li><a href="#features">Características</a></li>
+                        <li><a href="#location">Ubicación</a></li>
+                        <li><a href="#comments">Comentarios</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="floating-elements">
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+            <div class="floating-element"></div>
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-logo"></div>
+                <h1 class="hero-title">HERAHOME</h1>
+                <p class="hero-subtitle">Experiencia futurista en el corazón de Torremolinos</p>
+                <div class="hero-buttons">
+                    <a href="#gallery" class="btn-hero-primary">
+                        <i class="fas fa-images"></i>
+                        Explorar Galería
+                    </a>
+                    <a href="#comments" class="btn-hero-secondary">
+                        <i class="fas fa-calendar-check"></i>
+                        Reservar Ahora
+                    </a>
+                </div>
+                <div class="hero-features">
+                    <div class="hero-feature">
+                        <i class="fas fa-wifi"></i>
+                        <span>WiFi Ultra Rápido</span>
+                    </div>
+                    <div class="hero-feature">
+                        <i class="fas fa-umbrella-beach"></i>
+                        <span>3 min a la playa</span>
+                    </div>
+                    <div class="hero-feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Seguridad 24/7</span>
+                    </div>
+                    <div class="hero-feature">
+                        <i class="fas fa-swimming-pool"></i>
+                        <span>Piscina Privada</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="section">
+        <div class="container">
+            <h2 class="section-title">Galería de Imágenes</h2>
+            <div class="photo-gallery">
+                <div class="photo-item">
+                    <img src="749660388.jpg" alt="Herahome - Sala de estar">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Sala de estar</h3>
+                        <p class="photo-description">Espacio amplio y moderno</p>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="750964333.jpg" alt="Herahome - Dormitorio">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Dormitorio principal</h3>
+                        <p class="photo-description">Confort y tranquilidad</p>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="760515964.jpg" alt="Herahome - Cocina">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Cocina equipada</h3>
+                        <p class="photo-description">Todo lo que necesitas</p>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="760516074.jpg" alt="Herahome - Baño">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Baño moderno</h3>
+                        <p class="photo-description">Diseño contemporáneo</p>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="760516077.jpg" alt="Herahome - Terraza">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Terraza privada</h3>
+                        <p class="photo-description">Vistas increíbles</p>
+                    </div>
+                </div>
+                <div class="photo-item">
+                    <img src="760516322.jpg" alt="Herahome - Exteriores">
+                    <div class="photo-overlay">
+                        <h3 class="photo-title">Áreas comunes</h3>
+                        <p class="photo-description">Espacios para disfrutar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="section" style="background: var(--bg-white);">
+        <div class="container">
+            <h2 class="section-title">Características del Alojamiento</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h3 class="feature-title">WiFi de Alta Velocidad</h3>
+                    <p class="feature-description">Conexión rápida y fiable para trabajo y entretenimiento</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3 class="feature-title">Diseño Moderno</h3>
+                    <p class="feature-description">Amplios espacios con decoración contemporánea</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-umbrella-beach"></i>
+                    </div>
+                    <h3 class="feature-title">Cerca de la Playa</h3>
+                    <p class="feature-description">A solo 3 minutos caminando de la playa</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Seguridad 24/7</h3>
+                    <p class="feature-description">Sistema de seguridad y vigilancia constante</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-parking"></i>
+                    </div>
+                    <h3 class="feature-title">Parking Incluido</h3>
+                    <p class="feature-description">Aparcamiento privado disponible sin coste adicional</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-swimming-pool"></i>
+                    </div>
+                    <h3 class="feature-title">Piscina Comunitaria</h3>
+                    <p class="feature-description">Acceso a piscina y zonas de recreo</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="location" class="section">
+        <div class="container">
+            <h2 class="section-title">Ubicación</h2>
+            <div class="location-info">
+                <h3 class="location-title">Calle Playa Park, Número 13</h3>
+                <p class="location-address">Torremolinos, Málaga, España</p>
+                <div class="location-badges">
+                    <span class="badge">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Zona Premium
+                    </span>
+                    <span class="badge">
+                        <i class="fas fa-umbrella-beach"></i>
+                        3 min a la playa
+                    </span>
+                    <span class="badge">
+                        <i class="fas fa-shopping-cart"></i>
+                        Supermercados cerca
+                    </span>
+                    <span class="badge">
+                        <i class="fas fa-utensils"></i>
+                        Restaurantes cercanos
+                    </span>
+                </div>
+            </div>
+            <div id="map"></div>
+        </div>
+    </section>
+
+    <section id="comments" class="section" style="background: var(--bg-white);">
+        <div class="container">
+            <h2 class="section-title">Opiniones de Huéspedes</h2>
+            
+            <div class="comment-section">
+                <h3>Deja tu Comentario</h3>
+                <form id="commentForm" class="comment-form">
+                    <div class="form-group">
+                        <label class="form-label" for="reservationId">Número de Reserva *</label>
+                        <input type="text" id="reservationId" class="form-input" placeholder="Ej: RES-2024-001" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="guestName">Tu Nombre *</label>
+                        <input type="text" id="guestName" class="form-input" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Valoración *</label>
+                        <div class="star-rating" id="starRating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="commentText">Tu Comentario *</label>
+                        <textarea id="commentText" class="form-textarea" placeholder="Comparte tu experiencia..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        Enviar Comentario
+                    </button>
+                </form>
+            </div>
+
+            <div class="comments-list" id="commentsList">
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <h4 class="comment-name">María González</h4>
+                            <p class="comment-reservation">Reserva: RES-2024-001</p>
+                        </div>
+                        <div class="comment-rating">★★★★★</div>
+                    </div>
+                    <p class="comment-text">Una experiencia increíble! El apartamento es moderno y está perfectamente ubicado. Sin duda volveré. La atención fue excelente y todo estaba muy limpio.</p>
+                </div>
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <h4 class="comment-name">John Smith</h4>
+                            <p class="comment-reservation">Reserva: RES-2024-002</p>
+                        </div>
+                        <div class="comment-rating">★★★★☆</div>
+                    </div>
+                    <p class="comment-text">Excelente ubicación y muy limpio. El diseño es impresionante y todo funcionó perfectamente. Recomendado 100% para familias.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <h3 class="footer-logo">Herahome</h3>
+                <p class="footer-description">Tu hogar ideal en Torremolinos para unas vacaciones inolvidables</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+                <p class="footer-copyright">© 2024 Herahome. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Initialize map
+        const map = L.map('map').setView([36.6204, -4.5024], 16);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Custom marker for Herahome
+        const herahomeIcon = L.divIcon({
+            html: '<div style="background: #003580; color: white; padding: 8px 12px; border-radius: 4px; text-align: center; font-weight: bold; font-size: 12px; border: 2px solid #febb02;">Herahome</div>',
+            iconSize: [80, 30],
+            className: 'custom-marker'
+        });
+
+        L.marker([36.6204, -4.5024], {icon: herahomeIcon})
+            .addTo(map)
+            .bindPopup('<b>Herahome</b><br>Calle Playa Park, 13<br>Torremolinos')
+            .openPopup();
+
+        // Star rating system
+        let selectedRating = 0;
+        const stars = document.querySelectorAll('.star');
+        
+        stars.forEach(star => {
+            star.addEventListener('click', function() {
+                selectedRating = parseInt(this.dataset.rating);
+                updateStars();
+            });
+            
+            star.addEventListener('mouseenter', function() {
+                const hoverRating = parseInt(this.dataset.rating);
+                highlightStars(hoverRating);
+            });
+        });
+
+        document.getElementById('starRating').addEventListener('mouseleave', function() {
+            updateStars();
+        });
+
+        function updateStars() {
+            highlightStars(selectedRating);
+        }
+
+        function highlightStars(rating) {
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        // Comment form submission
+        document.getElementById('commentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const reservationId = document.getElementById('reservationId').value;
+            const guestName = document.getElementById('guestName').value;
+            const commentText = document.getElementById('commentText').value;
+            
+            if (selectedRating === 0) {
+                showNotification('Por favor, selecciona una valoración con estrellas', 'error');
+                return;
+            }
+            
+            // Create new comment element
+            const newComment = document.createElement('div');
+            newComment.className = 'comment-item';
+            newComment.style.opacity = '0';
+            newComment.innerHTML = `
+                <div class="comment-header">
+                    <div class="comment-author">
+                        <h4 class="comment-name">${guestName}</h4>
+                        <p class="comment-reservation">Reserva: ${reservationId}</p>
+                    </div>
+                    <div class="comment-rating">${'★'.repeat(selectedRating)}${'☆'.repeat(5-selectedRating)}</div>
+                </div>
+                <p class="comment-text">${commentText}</p>
+            `;
+            
+            // Add to comments list
+            const commentsList = document.getElementById('commentsList');
+            commentsList.insertBefore(newComment, commentsList.firstChild);
+            
+            // Animate in
+            setTimeout(() => {
+                newComment.style.transition = 'opacity 0.5s ease';
+                newComment.style.opacity = '1';
+            }, 100);
+            
+            // Reset form
+            this.reset();
+            selectedRating = 0;
+            updateStars();
+            
+            showNotification('¡Comentario enviado con éxito! Gracias por tu opinión.', 'success');
+        });
+
+        // Notification system
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="notification-icon fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Hide and remove notification
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
