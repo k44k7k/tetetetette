@@ -820,6 +820,295 @@
             color: rgba(255, 255, 255, 0.7);
         }
 
+        /* Booking Calendar Modal */
+        .booking-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            padding: 20px;
+        }
+
+        .booking-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .booking-content {
+            background: var(--bg-white);
+            border-radius: 24px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+
+        .booking-header {
+            padding: 24px 24px 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .booking-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-light);
+            border: none;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dark);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .booking-close:hover {
+            background: var(--border-color);
+            transform: rotate(90deg);
+        }
+
+        .booking-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .booking-header p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .booking-body {
+            padding: 24px;
+        }
+
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-nav button {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-light);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav button:hover {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .calendar-nav h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .calendar-day-name {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            padding: 8px 0;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .calendar-day:hover:not(.disabled):not(.booked) {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .calendar-day.selected {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .calendar-day.in-range {
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--secondary-color);
+        }
+
+        .calendar-day.disabled {
+            color: var(--border-color);
+            cursor: not-allowed;
+        }
+
+        .calendar-day.booked {
+            background: #fee2e2;
+            color: #ef4444;
+            cursor: not-allowed;
+            text-decoration: line-through;
+        }
+
+        .calendar-day.today {
+            border-color: var(--secondary-color);
+        }
+
+        .booking-dates {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .date-input {
+            flex: 1;
+        }
+
+        .date-input label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 6px;
+        }
+
+        .date-input input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+            background: var(--bg-light);
+        }
+
+        .date-input input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .booking-summary {
+            background: var(--bg-light);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .summary-row:last-child {
+            margin-bottom: 0;
+            padding-top: 8px;
+            border-top: 1px solid var(--border-color);
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .summary-row span:first-child {
+            color: var(--text-light);
+        }
+
+        .summary-row span:last-child {
+            color: var(--text-dark);
+        }
+
+        .btn-book {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-book:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-book:disabled {
+            background: var(--border-color);
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .booking-success {
+            text-align: center;
+            padding: 40px 24px;
+        }
+
+        .booking-success i {
+            font-size: 64px;
+            color: var(--success-color);
+            margin-bottom: 20px;
+        }
+
+        .booking-success h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+
+        .booking-success p {
+            color: var(--text-light);
+            margin-bottom: 24px;
+        }
+
+        .booking-success .reservation-code {
+            background: var(--bg-light);
+            padding: 16px;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 24px;
+        }
+
         #map {
             height: 450px;
             border-radius: 12px;
@@ -1534,6 +1823,57 @@
         </div>
     </div>
 
+    <!-- Booking Calendar Modal -->
+    <div class="booking-modal" id="bookingModal">
+        <div class="booking-content">
+            <div class="booking-header">
+                <button class="booking-close" id="bookingClose"><i class="fas fa-times"></i></button>
+                <h3>Reservar Estancia</h3>
+                <p>Selecciona las fechas de tu visita</p>
+            </div>
+            <div class="booking-body" id="bookingBody">
+                <div class="calendar-nav">
+                    <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                    <h4 id="currentMonth"></h4>
+                    <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+                <div class="booking-dates">
+                    <div class="date-input">
+                        <label>Entrada</label>
+                        <input type="text" id="checkInDate" readonly placeholder="Seleccionar">
+                    </div>
+                    <div class="date-input">
+                        <label>Salida</label>
+                        <input type="text" id="checkOutDate" readonly placeholder="Seleccionar">
+                    </div>
+                </div>
+                <div class="booking-summary" id="bookingSummary" style="display: none;">
+                    <div class="summary-row">
+                        <span>Noches</span>
+                        <span id="nightsCount">0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Precio por noche</span>
+                        <span>120€</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Total</span>
+                        <span id="totalPrice">0€</span>
+                    </div>
+                </div>
+                <button class="btn-book" id="btnBook" disabled>Confirmar Reserva</button>
+            </div>
+            <div class="booking-success" id="bookingSuccess" style="display: none;">
+                <i class="fas fa-check-circle"></i>
+                <h3>¡Reserva Confirmada!</h3>
+                <p>Tu estancia ha sido reservada con éxito</p>
+                <div class="reservation-code" id="reservationCode"></div>
+                <button class="btn-book" id="btnCloseSuccess">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
     <section id="gallery" class="section reveal">
         <div class="container">
             <div class="section-header">
@@ -2013,6 +2353,244 @@
                     });
                 }
             });
+        });
+
+        // ===== BOOKING CALENDAR =====
+        const bookingModal = document.getElementById('bookingModal');
+        const bookingClose = document.getElementById('bookingClose');
+        const bookingBody = document.getElementById('bookingBody');
+        const bookingSuccess = document.getElementById('bookingSuccess');
+        const calendarGrid = document.getElementById('calendarGrid');
+        const currentMonthEl = document.getElementById('currentMonth');
+        const prevMonthBtn = document.getElementById('prevMonth');
+        const nextMonthBtn = document.getElementById('nextMonth');
+        const checkInInput = document.getElementById('checkInDate');
+        const checkOutInput = document.getElementById('checkOutDate');
+        const bookingSummary = document.getElementById('bookingSummary');
+        const nightsCountEl = document.getElementById('nightsCount');
+        const totalPriceEl = document.getElementById('totalPrice');
+        const btnBook = document.getElementById('btnBook');
+        const btnCloseSuccess = document.getElementById('btnCloseSuccess');
+        const reservationCodeEl = document.getElementById('reservationCode');
+
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+        let checkInDate = null;
+        let checkOutDate = null;
+        const pricePerNight = 120;
+
+        // Simulated booked dates (random dates for demo)
+        const bookedDates = [
+            new Date(2026, 0, 20), new Date(2026, 0, 21), new Date(2026, 0, 22),
+            new Date(2026, 1, 5), new Date(2026, 1, 6), new Date(2026, 1, 7), new Date(2026, 1, 8),
+            new Date(2026, 1, 14), new Date(2026, 1, 15),
+            new Date(2026, 2, 10), new Date(2026, 2, 11), new Date(2026, 2, 12),
+        ];
+
+        const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                           'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+        const dayNames = ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa', 'Do'];
+
+        function isBooked(date) {
+            return bookedDates.some(d => 
+                d.getDate() === date.getDate() && 
+                d.getMonth() === date.getMonth() && 
+                d.getFullYear() === date.getFullYear()
+            );
+        }
+
+        function isToday(date) {
+            const today = new Date();
+            return date.getDate() === today.getDate() && 
+                   date.getMonth() === today.getMonth() && 
+                   date.getFullYear() === today.getFullYear();
+        }
+
+        function isPast(date) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return date < today;
+        }
+
+        function isInRange(date) {
+            if (!checkInDate || !checkOutDate) return false;
+            return date > checkInDate && date < checkOutDate;
+        }
+
+        function isSelected(date) {
+            if (checkInDate && date.getTime() === checkInDate.getTime()) return true;
+            if (checkOutDate && date.getTime() === checkOutDate.getTime()) return true;
+            return false;
+        }
+
+        function formatDate(date) {
+            if (!date) return '';
+            return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+        }
+
+        function renderCalendar() {
+            calendarGrid.innerHTML = '';
+            currentMonthEl.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+            // Day names
+            dayNames.forEach(day => {
+                const dayNameEl = document.createElement('div');
+                dayNameEl.className = 'calendar-day-name';
+                dayNameEl.textContent = day;
+                calendarGrid.appendChild(dayNameEl);
+            });
+
+            // First day of month
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            let startDay = firstDay.getDay() - 1;
+            if (startDay < 0) startDay = 6;
+
+            // Days in month
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            // Empty cells
+            for (let i = 0; i < startDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-day disabled';
+                calendarGrid.appendChild(emptyCell);
+            }
+
+            // Day cells
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(currentYear, currentMonth, day);
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                dayEl.textContent = day;
+
+                if (isPast(date)) {
+                    dayEl.classList.add('disabled');
+                } else if (isBooked(date)) {
+                    dayEl.classList.add('booked');
+                } else {
+                    if (isSelected(date)) dayEl.classList.add('selected');
+                    if (isInRange(date)) dayEl.classList.add('in-range');
+                    if (isToday(date)) dayEl.classList.add('today');
+
+                    dayEl.addEventListener('click', () => selectDate(date));
+                }
+
+                calendarGrid.appendChild(dayEl);
+            }
+        }
+
+        function selectDate(date) {
+            if (!checkInDate || (checkInDate && checkOutDate)) {
+                checkInDate = date;
+                checkOutDate = null;
+            } else if (date > checkInDate) {
+                // Check if any booked date is in range
+                let hasBookedInRange = false;
+                for (let d = new Date(checkInDate); d <= date; d.setDate(d.getDate() + 1)) {
+                    if (isBooked(new Date(d))) {
+                        hasBookedInRange = true;
+                        break;
+                    }
+                }
+                if (hasBookedInRange) {
+                    checkInDate = date;
+                    checkOutDate = null;
+                } else {
+                    checkOutDate = date;
+                }
+            } else {
+                checkInDate = date;
+                checkOutDate = null;
+            }
+
+            updateBookingUI();
+            renderCalendar();
+        }
+
+        function updateBookingUI() {
+            checkInInput.value = formatDate(checkInDate);
+            checkOutInput.value = formatDate(checkOutDate);
+
+            if (checkInDate && checkOutDate) {
+                const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+                const total = nights * pricePerNight;
+                nightsCountEl.textContent = nights;
+                totalPriceEl.textContent = `${total}€`;
+                bookingSummary.style.display = 'block';
+                btnBook.disabled = false;
+            } else {
+                bookingSummary.style.display = 'none';
+                btnBook.disabled = true;
+            }
+        }
+
+        function openBookingModal() {
+            bookingModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderCalendar();
+        }
+
+        function closeBookingModal() {
+            bookingModal.classList.remove('active');
+            document.body.style.overflow = '';
+            // Reset
+            bookingBody.style.display = 'block';
+            bookingSuccess.style.display = 'none';
+            checkInDate = null;
+            checkOutDate = null;
+            updateBookingUI();
+        }
+
+        function confirmBooking() {
+            const code = 'RES-' + Date.now().toString().slice(-6);
+            reservationCodeEl.textContent = code;
+            bookingBody.style.display = 'none';
+            bookingSuccess.style.display = 'block';
+
+            // Add booked dates to simulation
+            for (let d = new Date(checkInDate); d <= checkOutDate; d.setDate(d.getDate() + 1)) {
+                bookedDates.push(new Date(d));
+            }
+        }
+
+        // Event listeners for booking
+        document.querySelectorAll('.btn-hero-secondary').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                openBookingModal();
+            });
+        });
+
+        bookingClose.addEventListener('click', closeBookingModal);
+        bookingModal.addEventListener('click', (e) => {
+            if (e.target === bookingModal) closeBookingModal();
+        });
+
+        prevMonthBtn.addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        });
+
+        btnBook.addEventListener('click', confirmBooking);
+        btnCloseSuccess.addEventListener('click', closeBookingModal);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && bookingModal.classList.contains('active')) {
+                closeBookingModal();
+            }
         });
     </script>
 </body>
