@@ -1248,33 +1248,84 @@
             }
 
             .hero-section {
-                padding: 140px 0 80px;
+                padding: 120px 0 60px;
                 min-height: auto;
             }
 
+            .hero-content {
+                padding: 0 10px;
+            }
+
             .hero-logo {
-                width: 200px;
-                height: 200px;
-                margin-bottom: 24px;
+                width: 150px;
+                height: 150px;
+                margin: 0 auto 20px;
             }
 
             .hero-logo::before {
-                width: 120px;
-                height: 120px;
+                width: 100px;
+                height: 100px;
+            }
+
+            .hero-title {
+                font-size: 42px;
+                letter-spacing: 0.05em;
+                margin-bottom: 16px;
+            }
+
+            .hero-subtitle {
+                font-size: 16px;
+                margin-bottom: 32px;
+                padding: 0 10px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                gap: 12px;
+                width: 100%;
+                padding: 0;
+            }
+
+            .btn-hero-primary,
+            .btn-hero-secondary {
+                width: 100%;
+                justify-content: center;
+                padding: 14px 24px;
+                font-size: 14px;
             }
 
             .hero-features {
-                gap: 12px;
-                margin-top: 48px;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                margin-top: 40px;
             }
 
             .hero-feature {
                 padding: 10px 16px;
                 font-size: 13px;
+                width: auto;
+            }
+
+            .scroll-indicator {
+                bottom: 20px;
             }
 
             .section {
-                padding: 60px 0;
+                padding: 50px 0;
+            }
+
+            .section-header {
+                margin-bottom: 40px;
+            }
+
+            .section-title {
+                font-size: 28px;
+            }
+
+            .section-subtitle {
+                font-size: 15px;
+                padding: 0 10px;
             }
             
             .photo-gallery {
@@ -1289,6 +1340,14 @@
             .photo-item {
                 aspect-ratio: 16/10;
             }
+
+            .photo-overlay {
+                padding: 20px;
+            }
+
+            .photo-title {
+                font-size: 18px;
+            }
             
             .features-grid {
                 grid-template-columns: 1fr;
@@ -1296,15 +1355,34 @@
             }
 
             .feature-card {
-                padding: 32px 24px;
+                padding: 28px 20px;
+            }
+
+            .feature-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 26px;
+                margin-bottom: 16px;
+            }
+
+            .feature-title {
+                font-size: 18px;
+            }
+
+            .feature-description {
+                font-size: 14px;
             }
             
             .comment-section {
-                padding: 32px 20px;
+                padding: 24px 16px;
             }
 
             .location-info {
-                padding: 24px;
+                padding: 20px;
+            }
+
+            .location-title {
+                font-size: 20px;
             }
 
             .location-badges {
@@ -1312,12 +1390,13 @@
             }
 
             .badge {
-                padding: 10px 14px;
-                font-size: 13px;
+                padding: 8px 12px;
+                font-size: 12px;
             }
 
             #map {
-                height: 350px;
+                height: 300px;
+                border-radius: 16px;
             }
 
             .lightbox-nav {
@@ -1328,6 +1407,24 @@
                 top: 20px;
                 right: 20px;
             }
+
+            .footer {
+                padding: 50px 0 30px;
+            }
+
+            .footer-logo {
+                font-size: 26px;
+            }
+
+            .footer-description {
+                font-size: 14px;
+            }
+
+            .social-links a {
+                width: 42px;
+                height: 42px;
+                font-size: 16px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1335,27 +1432,12 @@
                 padding: 0 16px;
             }
 
-            .hero-buttons {
-                flex-direction: column;
-                width: 100%;
-                padding: 0 20px;
+            .hero-title {
+                font-size: 36px;
             }
 
-            .btn-hero-primary,
-            .btn-hero-secondary {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .hero-features {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .hero-feature {
-                width: 100%;
-                max-width: 280px;
-                justify-content: center;
+            .hero-subtitle {
+                font-size: 15px;
             }
         }
     </style>
